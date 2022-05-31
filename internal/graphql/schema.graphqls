@@ -1,0 +1,484 @@
+scalar Int64
+scalar Float64
+
+# TODO(kashif) do we need a UInt64 type?, confirm that all values have correct U types
+
+type Staker {
+  """Unique staker address"""
+  address: String!
+
+  """List of staked pools"""
+  poolsArray: [String]!
+
+  # """Total value of earnings (in RUNE) across all pools."""
+  # totalEarned: Int64 # TODO(kashif) not implemented
+
+  # """Average of all pool ROIs."""
+  # totalROI: Float64 # TODO(kashif) not implemented
+
+  """Total staked (in RUNE) across all pools."""
+  totalStaked: Int64!
+}
+
+type Stats {
+  """Daily active users (unique addresses interacting)"""
+  dailyActiveUsers: Int64!
+
+  """Daily transactions"""
+  dailyTx: Int64!
+
+  """Monthly active users"""
+  monthlyActiveUsers: Int64!
+
+  """Monthly transactions"""
+  monthlyTx: Int64!
+
+  # TODO(kashif) not implemented
+  # """Number of active pools"""
+  # poolCount : Int64!
+
+  """Total buying transactions"""
+  totalAssetBuys : Int64!
+
+  """Total selling transactions"""
+  totalAssetSells : Int64!
+
+  """Total RUNE balances"""
+  totalDepth : Int64!
+
+  # TODO(kashif) not implemented
+  # """Total earned (in RUNE Value)."""
+  # totalEarned : Int64!
+
+  """Total staking transactions"""
+  totalStakeTx : Int64!
+
+  """Total staked (in RUNE Value)."""
+  totalStaked : Int64!
+
+  """Total transactions"""
+  totalTx : Int64!
+
+  """Total unique swappers \u0026 stakers"""
+  totalUsers : Int64!
+
+  """Total (in RUNE Value) of all assets swapped since start."""
+  totalVolume : Int64!
+
+  # TODO(kashif) not implemented
+  # """Total (in RUNE Value) of all assets swapped in 24hrs"""
+  # totalVolume24hr : Int64!
+
+  """Total withdrawing transactions"""
+  totalWithdrawTx : Int64!
+}
+
+
+type PublicKeys {
+  """secp256k1 public key"""
+  secp256k1: String!
+
+  """ed25519 public key"""
+  ed25519: String!
+}
+
+type JailInfo {
+	nodeAddr      : String!
+	releaseHeight : Int64!
+	reason        : String!
+}
+
+type Node {
+  """Public keys of node"""
+  publicKeys: PublicKeys
+
+  """Node address"""
+  address: String!
+
+  """Node status"""
+  status: String!
+
+  """Amount bonded"""
+  bond: Int64!
+
+  """Whether not was requested to leave"""
+  requestedToLeave: Boolean!
+
+  """Whether not was forced to leave"""
+  forcedToLeave: Boolean!
+
+  """The leave height"""
+  leaveHeight: Int64!
+
+  """Node IP address"""
+  ipAddress: String!
+
+  """Node version"""
+  version: String!
+
+  """Node slash points"""
+  slashPoints: Int64!
+
+  """Node jail info"""
+  jail: JailInfo!
+
+  """Node current award"""
+  currentAward: Int64!
+}
+
+type BondMetricsStat {
+  """Average bond of nodes"""
+  averageBond: Int64!
+
+  """Maximum bond of nodes"""
+  maximumBond: Int64!
+
+  """Median bond of nodes"""
+  medianBond: Int64!
+
+  """Minimum bond of nodes"""
+  minimumBond: Int64!
+
+  """Total bond of nodes"""
+  totalBond: Int64!
+}
+
+type BondMetrics {
+  """Bond Metrics for active nodes"""
+  active: BondMetricsStat!
+
+  """Bond Metrics for standby nodes"""
+  standby: BondMetricsStat!
+}
+
+type BlockRewards {
+  """Total amount of block rewards paid from Thorchain's reserve"""
+  blockReward: Int64!
+
+  """Block rewards paid to Node Operators"""
+  bondReward: Int64!
+
+  """Block rewards paid to Liquidity Providers"""
+  poolReward: Int64!
+}
+
+type Network {
+  """List of active bonds"""
+  activeBonds: [Int64!]!
+
+  """Number of active nodes"""
+  activeNodeCount: Int64!
+
+  bondMetrics: BondMetrics!
+
+  blockRewards: BlockRewards!
+
+  """APY in RUNE taking weekly bond rewards and total amount bonded"""
+  bondingAPY: Float64!,
+
+  """APY of capital in liquidity pools"""
+  liquidityAPY: Float64!,
+
+  """Block height when next churn will be attempted"""
+  nextChurnHeight: Int64!,
+
+  """Number of blocks remaining for attempting to enable one of the existing staged pools"""
+  poolActivationCountdown: Int64!,
+
+  """Fraction of rewards sent to liquidity providers"""
+  poolShareFactor: Float64!,
+
+  """Total amount of Rune in the Protocol Reserve"""
+  totalReserve: Int64!
+
+  """List of standby bonds"""
+  standbyBonds: [Int64!]!
+
+  """Number of standby bonds"""
+  standbyNodeCount: Int64!
+
+  """Total amount of Rune added to Pools"""
+  totalPooledRune: Int64!
+}
+
+"""The current state of a pool. 
+To get historical data or averages use the history queries.""" 
+type Pool {
+  """Asset name in the format "CHAIN.TICKER-SYMBOL" e.g. "BNB.BTCB-101"""
+  asset: String!
+
+  """Pool Status (staged, available, suspended)"""
+  status: String!
+
+  """Current price of the asset in RUNE"""
+  price: Float64!
+
+  """Total stake units (LP shares) in that pool"""
+  units: Int64!
+
+  """Pool's Stakes"""
+  stakes: PoolStakes
+
+  """Pool's Depth"""
+  depth: PoolDepth
+
+  """Volume in the last 24 hours"""
+  volume24h: Int64!
+
+  """APY of pool"""
+  poolAPY: Float64!
+}
+
+type PoolStakes {
+  """Sum of all ASSET stakes for all time since pool creation denominated in ASSET"""
+  assetStaked: Int64!
+
+  """Sum of all RUNE stakes for all time since pool creation denominated in RUNE"""
+  runeStaked: Int64!
+
+  """RUNE value staked total: runeStakedTotal + (assetStakedTotal * assetPrice) """
+  poolStaked: Int64!
+}
+
+type PoolDepth {
+  """Current asset balance in ASSET"""
+  assetDepth: Int64!
+
+  """Current balance in RUNE"""
+  runeDepth: Int64!
+
+  """Combined total balance: 2 * runeDepth"""
+  poolDepth: Int64!  
+}
+
+# Coming soon
+enum PoolOrderAttribute {
+  DEPTH
+  VOLUME
+}
+
+enum Interval {
+  """5 minute period"""
+  MINUTE5
+
+  """Hour period"""
+  HOUR
+
+  """Day period"""
+  DAY
+
+  """Week period"""
+  WEEK
+
+  """Month period"""
+  MONTH
+
+  """Quarter period"""
+  QUARTER
+
+  """Year period"""
+  YEAR
+}
+
+type PoolHistoryDetails {
+  """Overall Depth History Stats for given time interval"""
+  meta: PoolHistoryMeta
+
+  """Depth History Stats by time interval"""
+  intervals: [PoolHistoryBucket]!
+}
+
+type PoolHistoryMeta {
+  """The beginning timestamp of the first interval. Can be smaller then from"""
+  first: Int64!
+
+  # TODO(acsaba): make sure that < is used for until (not <=). Test.
+  """The beginning timestamp of the last interval. It is smaller then until"""
+  last: Int64!
+
+  """The rune at the beginning of the first interval
+  or at from timestamp if it was given."""
+  runeFirst: Int64!
+
+  """The rune amount at the beginning of the last interval."""
+  runeLast: Int64!
+
+  """The asset at the beginning of the first interval
+  or at from timestamp if it was given."""
+  assetFirst: Int64!
+
+  """The asset amount at the beginning of the last interval."""
+  assetLast: Int64!
+
+  """runeFirst / assetFirst"""
+  priceFirst: Float64!
+
+  """runeLast / assetLast"""
+  priceLast: Float64!
+}
+
+type PoolHistoryBucket {
+  """The starting timestamp of the interval"""
+  time: Int64!
+
+  """The amount of Rune in the pool at the beginning of this period"""
+  rune: Int64!
+
+  """The amount of Asset in the pool at the beginning of this period"""
+  asset: Int64!
+
+  """Price at the beginning, it's equal to rune/asset"""
+  price: Float64!
+}
+
+
+"""First and last buckets will have truncated stats if
+from/until are not on interval boundaries."""
+type PoolVolumeHistory {
+  """Overall Swap History Stats for given time interval"""
+  meta: PoolVolumeHistoryMeta
+
+  """Swaps History Stats by time interval"""
+  intervals: [PoolVolumeHistoryBucket]!
+}
+
+type PoolVolumeHistoryMeta {
+  # TODO(acsaba): Write test that logic is kept.
+  """The beginning timestamp of the first interval. Can be smaller then from"""
+  first: Int64!
+
+  # TODO(acsaba): make sure that < is used for until (not <=). Test.
+  """The beginning timestamp of the last interval. It is smaller then until"""
+  last: Int64!
+
+  """toRune + toAsset (denoted in rune)"""
+  combined : VolumeStats
+
+  """Volume of swaps from asset to rune denoted in rune."""
+  toRune: VolumeStats
+
+  """Volume of swaps from rune to asset denoted in rune."""
+  toAsset: VolumeStats
+}
+
+type PoolVolumeHistoryBucket {
+  """The starting timestamp of the interval"""
+  time: Int64!
+
+  # TODO(acsaba): rename to total, rename json to match this(remove volume)
+  """Combined stats for swaps from asset to rune and from rune to asset"""
+  combined : VolumeStats
+
+  """Stats for swaps from asset to rune"""
+  toRune: VolumeStats
+
+  """Stats for swaps from rune to asset"""
+  toAsset: VolumeStats
+}
+
+"""Stats about swaps in any given interval
+This can represent volume of swaps from or to RUNE and also combined stats."""
+type VolumeStats {
+  """Total number of swaps in this period (TxCount)"""
+  count: Int64!
+
+  """Total volume of swaps in RUNE (RuneE8Total) in this period"""
+  volumeInRune: Int64!
+
+  """Total fees in RUNE (LiqFeeInRuneE8Total) in this period"""
+  feesInRune: Int64!
+}
+
+type PoolStakeHistory {
+  """Overall Stake History Stats for given time interval"""
+  meta: PoolStakeHistoryMeta
+
+  """Stake History Stats by time interval"""
+  intervals: [PoolStakeHistoryBucket]!
+}
+
+type PoolStakeHistoryMeta {
+  """The beginning timestamp of the first interval. Can be smaller then from"""
+  first: Int64!
+
+  """The beginning timestamp of the last interval. It is smaller then until"""
+  last: Int64!
+
+  """Total number of stakes in this query (TxCount)"""
+  count: Int64!
+
+  """Total volume of stakes in RUNE (RuneE8Total)"""
+  runeVolume: Int64!
+
+  """Total volume of stakes in Asset (AssetE8Total)"""
+  assetVolume: Int64!
+
+  """Total stake units (StakeUnitsTotal)"""
+  units: Int64!
+}
+
+
+type PoolStakeHistoryBucket {
+  """The starting timestamp of the interval"""
+  time: Int64!
+
+  """Total number of stakes in this period (TxCount)"""
+  count: Int64!
+
+  """Total volume of stakes in RUNE (RuneE8Total)"""
+  runeVolume: Int64!
+
+  """Total volume of stakes in Asset (AssetE8Total)"""
+  assetVolume: Int64!
+
+  """Total stake units (StakeUnitsTotal)"""
+  units: Int64!
+}
+
+enum NodeStatus {
+  ACTIVE
+  STANDBY
+  DISABLED
+  JAILED
+}
+
+
+type Query {
+  """Get network data
+  NOTE: This returns a 5sec cached version"""
+  network: Network!
+
+  """Get list of nodes. 
+  NOTE: This returns a 5sec cached version"""
+  nodes(status: NodeStatus): [Node]!
+
+  """Get node by address. 
+  NOTE: This returns a 5sec cached version"""
+  node(address: String!): Node
+
+  """Get global stats for all pools and all transactions"""
+  stats: Stats!
+
+  """Get Staker details by address"""
+  staker(address: String!): Staker
+
+  """Get list of Stakers"""
+  stakers: [Staker]!
+
+  """Get pool details by ID"""
+  pool(asset: String!): Pool
+
+  """Get List of Pools"""
+  pools(limit: Int): [Pool]!
+
+  """Get historical statistics of swaps for a given asset pool"""
+  volumeHistory(pool: String, from: Int64!, until: Int64!, interval: Interval!): PoolVolumeHistory!
+
+  """Get historical statistics of stakes for a given asset pool"""
+  stakeHistory(pool: String!, from: Int64, until: Int64, interval: Interval): PoolStakeHistory!
+
+  """Get historical statistics of depths for a given asset pool"""
+  poolHistory(pool: String!, from: Int64, until: Int64, interval: Interval): PoolHistoryDetails!
+}
+
+

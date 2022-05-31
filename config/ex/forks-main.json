@@ -1,0 +1,11 @@
+{
+    "thorchain": {
+        "fork_infos": [
+            {
+                "chain_id": "thorchain",
+                "earliest_block_hash": "7D37DEF6E1BE23C912092069325C4A51E66B9EF7DDBDE004FF730CFABC0307B1",
+                "earliest_block_height": 1
+            }
+        ]
+    }
+}

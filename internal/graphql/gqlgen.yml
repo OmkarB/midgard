@@ -1,0 +1,52 @@
+schema:
+  - ./*.graphqls
+
+exec:
+  filename: generated/generated.go
+  package: generated
+
+model:
+  filename: model/models_gen.go
+  package: model
+
+resolver:
+  layout: follow-schema
+  package: graphql
+
+autobind:
+  - "gitlab.com/thorchain/midgard/internal/graphql/model"
+
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.ID
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+  Int:
+    model:
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+  Int64:
+    model:
+      - gitlab.com/thorchain/midgard/internal/graphql/model.Int64
+  Float64:
+    model:
+      - gitlab.com/thorchain/midgard/internal/graphql/model.Float64
+  Pool:
+    fields:
+      status:
+        resolver: true
+      price:
+        resolver: true
+      units:
+        resolver: true
+      stakes:
+        resolver: true
+      depth:
+        resolver: true
+      volume24h:
+        resolver: true
+      poolAPY:
+        resolver: true

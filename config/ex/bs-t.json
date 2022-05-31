@@ -1,0 +1,6 @@
+{
+  "blockstore": {
+    "local": "./tmp/blockstore-test",
+    "remote": "https://storage.googleapis.com/public-snapshots-ninerealms/midgard-blockstore/testnet/v2/"
+  }
+}
