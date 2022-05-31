@@ -1,17 +1,17 @@
 -- version 24
 
-CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+-- CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
 
-----------
--- Clean up
+-- ----------
+-- -- Clean up
 
-DROP SCHEMA IF EXISTS midgard_agg CASCADE;
-DROP SCHEMA IF EXISTS midgard CASCADE;
+-- DROP SCHEMA IF EXISTS midgard_agg CASCADE;
+-- DROP SCHEMA IF EXISTS midgard CASCADE;
 
-----------
--- Fresh start
+-- ----------
+-- -- Fresh start
 
-CREATE SCHEMA midgard;
+-- CREATE SCHEMA midgard;
 
 -- Check that the newly created schema is the one we are going to work with.
 -- If someone uses a non-standard set up, like using a different postgres user name, it's better
