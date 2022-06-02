@@ -2,7 +2,7 @@
   "listen_port": 8080,
   "max_block_age": "60s",
   "thorchain": {
-    "tendermint_url": "http://localhost:27147/websocket",
+    "tendermint_url": "https://rpc.ninerealms.com/websocket",
     "thornode_url": "https://thornode.thorchain.info/thorchain",
     "last_chain_backoff": "7s",
     "fetch_batch_size": 100,
