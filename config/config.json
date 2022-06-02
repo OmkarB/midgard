@@ -3,7 +3,7 @@
   "max_block_age": "60s",
   "thorchain": {
     "tendermint_url": "http://localhost:27147/websocket",
-    "thornode_url": "http://localhost:1317/thorchain",
+    "thornode_url": "https://thornode.thorchain.info/thorchain",
     "last_chain_backoff": "7s",
     "fetch_batch_size": 100,
     "parallelism": 4,
@@ -16,8 +16,7 @@
       "nodes"
     ]
   },
-  "blockstore":{
-  },
+  "blockstore": {},
   "timescale": {
     "host": "localhost",
     "port": 5432,
